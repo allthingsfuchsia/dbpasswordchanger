@@ -3,68 +3,88 @@
         "dbType": "MSSQL",
         "className": "com.microsoft.sqlserver.jdbc.SQLServerDriver",
         "jar": "",
-        "urlTemplate": ""
+        "urlTemplate": "jdbc:sqlserver://${hostName}:${port};",
+        "passwordChangeSql": "ALTER LOGIN ${userName} WITH PASSWORD = '${newPassword}' OLD_PASSWORD = '${password}';",
+        "defaultPort": 1434
     },
     "ORACLE": {
         "dbType": "ORACLE",
         "className": "oracle.jdbc.driver.OracleDriver",
         "jar": "",
-        "urlTemplate": ""
+        "urlTemplate": "jdbc:oracle:thin:@${hostName}:${port}:${serviceName}",
+        "passwordChangeSql": "ALTER USER ${userName} IDENTIFIED BY ${newPassword};",
+        "defaultPort": 1521
     },
     "DB2": {
         "dbType": "DB2",
         "className": "com.ibm.db2.jcc.DB2Driver",
         "jar": "",
-        "urlTemplate": ""
+        "urlTemplate": "jdbc:db2://${hostName}:${port}/${serviceName}",
+        "passwordChangeSql": "fn call conn.changeDB2Password(String oldPassword, String newPassword)",
+        "defaultPort": 50000
     },
     "POSTGRES": {
         "dbType": "POSTGRES",
         "className": "org.postgresql.Driver",
         "jar": "",
-        "urlTemplate": ""
+        "urlTemplate": "jdbc:postgresql://${hostName}:${port}/${serviceName}",
+        "passwordChangeSql": "ALTER USER ${userName} WITH PASSWORD '${newPassword}';",
+        "defaultPort": 5432
     },
     "MYSQL": {
         "dbType": "MYSQL",
         "className": "com.mysql.cj.jdbc.Driver",
         "jar": "mysql-connector-j-8.0.31.jar",
-        "urlTemplate": "jdbc:mysql://{hostname}:{port}",
-        "passwordChangeSql":"SET PASSWORD FOR CURRENT_USER() = PASSWORD('%s')"
+        "urlTemplate": "jdbc:mysql://${hostName}:${port}",
+        "passwordChangeSql": "SET PASSWORD FOR CURRENT_USER() = PASSWORD('${newPassword}')",
+        "defaultPort": 3306
     },
     "MONGODB": {
         "dbType": "MONGODB",
-        "className": "mongodb.jdbc.MongoDriver",
+        "className": "com.mongodb.client",
         "jar": "",
-        "urlTemplate": ""
+        "urlTemplate": "mongodb://${userName}:${password}@${hostName}:${port}",
+        "passwordChangeSql": "???",
+        "defaultPort": 27017
     },
     "SYBASE": {
         "dbType": "SYBASE",
         "className": "com.sybase.jdbc4.jdbc.SybDriver",
         "jar": "",
-        "urlTemplate": ""
+        "urlTemplate": "",
+        "passwordChangeSql": "SET PASSWORD FOR CURRENT_USER() = PASSWORD('${newPassword}')",
+        "defaultPort": 5000
     },
     "MARIADB": {
         "dbType": "MARIADB",
         "className": "org.mariadb.jdbc.Driver",
-        "jar": "lib/mariadb-java-client-3.1.3.jar",
-        "urlTemplate": "jdbc:mariadb://{hostname}:{port}",
-        "passwordChangeSql":"SET PASSWORD FOR CURRENT_USER() = PASSWORD('%s')"
+        "jar": "mariadb-java-client-3.1.3.jar",
+        "urlTemplate": "jdbc:mariadb://${hostName}:${port}",
+        "passwordChangeSql": "SET PASSWORD FOR CURRENT_USER() = PASSWORD('${newPassword}')",
+        "defaultPort": 3306
     },
     "INFORMIX": {
         "dbType": "INFORMIX",
         "className": "com.informix.jdbc.IfxDriver",
         "jar": "",
-        "urlTemplate": ""
+        "urlTemplate": "",
+        "passwordChangeSql": "SET PASSWORD FOR CURRENT_USER() = PASSWORD(${newPassword})",
+        "defaultPort": 9088
     },
     "CASSANDRA": {
         "dbType": "CASSANDRA",
         "className": "",
         "jar": "",
-        "urlTemplate": ""
+        "urlTemplate": "",
+        "passwordChangeSql": "SET PASSWORD FOR CURRENT_USER() = PASSWORD(${newPassword})",
+        "defaultPort": 443
     },
     "JTDS": {
         "dbType": "JTDS",
         "className": "net.sourceforge.jtds.jdbc.Driver",
         "jar": "",
-        "urlTemplate": ""
+        "urlTemplate": "",
+        "passwordChangeSql": "SET PASSWORD FOR CURRENT_USER() = PASSWORD(${newPassword})",
+        "defaultPort": 0
     }
 }

@@ -6,7 +6,7 @@ public enum DBType {
     MSSQL,
     ORACLE,
     DB2,
-    MONGO,
+    MONGODB,
     POSTGRES,
     MYSQL,
     SYBASE,
