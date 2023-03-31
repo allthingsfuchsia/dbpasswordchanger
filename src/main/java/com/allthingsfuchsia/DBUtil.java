@@ -9,21 +9,23 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import com.ibm.db2.jcc.DB2Connection;
+
 public class DBUtil {
     private Connection connection;
     private DBInfo dbInfo;
 
     public DBUtil(DBInfo dbInfo) {
-        
-         this.dbInfo = dbInfo;
-         // Load the driver class
-         //try {
-        //   Class.forName(dbInfo.getClassName());
-        //   } catch (ClassNotFoundException ex) {
-        //   System.out.println("Unable to load the class. Terminating the program");
-        //   System.exit(-1);
-        //   }
-    
+
+        this.dbInfo = dbInfo;
+        // Load the driver class
+        // try {
+        // Class.forName(dbInfo.getClassName());
+        // } catch (ClassNotFoundException ex) {
+        // System.out.println("Unable to load the class. Terminating the program");
+        // System.exit(-1);
+        // }
+
         // get the connection
         try {
 
@@ -43,21 +45,31 @@ public class DBUtil {
 
     }
 
-
-    public String changePassword(){ 
-        String query = this.dbInfo.getPasswordchangeSql();
-        System.out.println(query);
-        try (Statement stmt = this.connection.createStatement()) {
-            if (stmt.execute(query)){
-                ResultSet resultSet = stmt.getResultSet();
-                System.out.println("resultset:" + resultSet.toString());
-            }else{
-                System.out.println("UpdateCount:  " + stmt.getUpdateCount());
+    public String changePassword() {
+        if (this.dbInfo.getDBType() == DBType.DB2) {
+            DB2Connection conn = (DB2Connection) this.connection;
+            try {
+                conn.changeDB2Password(this.dbInfo.password, this.dbInfo.newPassword);
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+            return this.dbInfo.newPassword;
+        } else {
+            String query = this.dbInfo.getPasswordchangeSql();
+            System.out.println(query);
+            try (Statement stmt = this.connection.createStatement()) {
+                if (stmt.execute(query)) {
+                    ResultSet resultSet = stmt.getResultSet();
+                    System.out.println("resultset:" + resultSet.toString());
+                } else {
+                    System.out.println("UpdateCount:  " + stmt.getUpdateCount());
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return this.dbInfo.newPassword;
         }
-        return this.dbInfo.newPassword;
     }
 
     public void showTableMetaData(String Schema, String tableName) {
@@ -202,6 +214,5 @@ public class DBUtil {
         }
 
     }
-
 
 }

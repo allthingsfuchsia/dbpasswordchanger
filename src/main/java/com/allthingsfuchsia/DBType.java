@@ -1,5 +1,7 @@
 package com.allthingsfuchsia;
 
+import java.util.Arrays;
+
 import com.fasterxml.jackson.annotation.JsonEnumDefaultValue;
 
 public enum DBType {
@@ -14,5 +16,9 @@ public enum DBType {
     CASSANDRA,
     MARIADB,
     @JsonEnumDefaultValue
-    UNKNOWN
+    UNKNOWN;
+
+    public static String getValues() {
+        return Arrays.asList(DBType.values()).toString();
+    }
 }

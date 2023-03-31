@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.MissingOptionException;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
@@ -11,6 +12,8 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 public class ArgumentParser {
         private Options options;
+        private AppActions action;
+        private boolean isDebug = false; 
 
         public ArgumentParser() {
                 this.options = new Options()
@@ -18,7 +21,7 @@ public class ArgumentParser {
                                 .addOption(Option.builder("t")
                                                 .longOpt("type")
                                                 .hasArg(true)
-                                                .desc("Database Type")
+                                                .desc("Database Types " + DBType.getValues())
                                                 .argName("DBType")
                                                 .required(true)
                                                 .build())
@@ -70,21 +73,30 @@ public class ArgumentParser {
                                                 .desc("Database Instance or Service Name or Database name")
                                                 .argName("database")
                                                 .required(false)
+                                                .build())
+                                .addOption(Option.builder("a")
+                                                .longOpt("action")
+                                                .hasArg(true)
+                                                .desc("Possible Actions" + AppActions.getValues())
+                                                .argName("action")
+                                                .required(true)
                                                 .build());
 
         }
 
-        public DBInfo parseArguments(String[] args) throws ParseException, IOException {
+        public DBInfo parseArguments(String[] args) throws MissingOptionException, ParseException, IOException {
                 DefaultParser parser = new DefaultParser();
                 DBInfo dbinfo;
 
                 CommandLine cmdLine = parser.parse(this.options, args);
                 if (cmdLine.hasOption('v')) {
+                        this.isDebug = true;
                         System.err.println("Running in verbose mode");
                 }
 
                 DBClassInfo dbClassInfo;
-                dbClassInfo = DBClassInfo.getDBClassInfo(cmdLine.getOptionValue('t'));
+                dbClassInfo = DBClassInfo.getDBClassInfo(cmdLine.getOptionValue('t').toUpperCase());
+                this.action = AppActions.valueOf(cmdLine.getOptionValue('a'));
                 dbinfo = new DBInfo(
                                 dbClassInfo,
                                 cmdLine.getOptionValue('H'),
@@ -96,6 +108,15 @@ public class ArgumentParser {
                                 cmdLine.getOptionValue('n'));
 
                 return dbinfo;
+        }
+
+
+        public AppActions getAction(){
+                return this.action;
+        }
+
+        public Options getOptions(){
+                return this.options;          
         }
 
 }

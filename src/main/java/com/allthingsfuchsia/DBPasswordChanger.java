@@ -1,4 +1,6 @@
 package com.allthingsfuchsia;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.ParseException;
 
 public class DBPasswordChanger {
     public static void main( String[] args )
@@ -12,14 +14,37 @@ public class DBPasswordChanger {
 
             if (dbInfo.getDBType()==DBType.MONGODB){
                 MongoDBUtil mg = new MongoDBUtil(dbInfo);
-            }else{
+            }
+            else{
 
             DBUtil dbutil = new DBUtil(dbInfo);
-
-            dbutil.listAllTables();
+            
+            switch (aParser.getAction()) {
+                case changePassword:
+                    if (dbInfo.newPassword == null)
+                    {
+                        System.exit(-1);
+                    }
+                    dbutil.changePassword();
+                    break;
+                case listAllTables:
+                    dbutil.listAllTables();
+                    break;
+                case executeQuery:
+                    dbutil.executeQuery(null);
+                    break;
+                case showTableMetaData:
+                    dbutil.showTableMetaData(null, null);
+                    break;
+                default:
+                    break;
+            }
         }
             
-        } catch (Exception e) {
+        } catch (ParseException e) {
+            System.out.println(e.getMessage());
+            new HelpFormatter().printHelp("apache args...", aParser.getOptions());
+        } catch (Exception e){
             System.out.println(e.getMessage());
         }
     }
