@@ -8,6 +8,7 @@ import org.apache.commons.cli.MissingOptionException;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 public class ArgumentParser {
@@ -70,8 +71,15 @@ public class ArgumentParser {
                                 .addOption(Option.builder("d")
                                                 .longOpt("database")
                                                 .hasArg(true)
-                                                .desc("Database Instance or Service Name or Database name")
+                                                .desc("Database name")
                                                 .argName("database")
+                                                .required(false)
+                                                .build())
+                                .addOption(Option.builder("i")
+                                                .longOpt("instance")
+                                                .hasArg(true)
+                                                .desc("Database Instance or Servie Name or Server Name")
+                                                .argName("instance")
                                                 .required(false)
                                                 .build())
                                 .addOption(Option.builder("a")
@@ -96,16 +104,18 @@ public class ArgumentParser {
 
                 DBClassInfo dbClassInfo;
                 dbClassInfo = DBClassInfo.getDBClassInfo(cmdLine.getOptionValue('t').toUpperCase());
-                this.action = AppActions.valueOf(cmdLine.getOptionValue('a'));
+                this.action = EnumUtils.getEnumIgnoreCase(AppActions.class, cmdLine.getOptionValue('a'));
+                
                 dbinfo = new DBInfo(
                                 dbClassInfo,
                                 cmdLine.getOptionValue('H'),
-                                NumberUtils.toInt(cmdLine.getOptionValue('p'),dbClassInfo.defaultPort),
+                                NumberUtils.toInt(cmdLine.getOptionValue('p'),dbClassInfo.getDefaultPort()),
                                 cmdLine.getOptionValue('U'),
                                 cmdLine.getOptionValue('P'),
-                                cmdLine.getOptionValue('d'),
+                                cmdLine.getOptionValue('i'),
                                 cmdLine.getOptionValue('u'),
-                                cmdLine.getOptionValue('n'));
+                                cmdLine.getOptionValue('n'),
+                                cmdLine.getOptionValue('d'));
 
                 return dbinfo;
         }

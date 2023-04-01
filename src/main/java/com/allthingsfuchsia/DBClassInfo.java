@@ -10,12 +10,13 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 
 public class DBClassInfo {
-    public DBType dbType;
-    public String className;
-    public String jar;
-    public String urlTemplate;
-    public String passwordChangeSql;
-    public int defaultPort;
+    
+    private DBType dbType;
+    private String className;
+    private String jar;
+    private String urlTemplate;
+    private String passwordChangeSql;
+    private int defaultPort;
 
     public static DBClassInfo getDBClassInfo(String dbtype) throws IOException
     {
@@ -33,5 +34,30 @@ public class DBClassInfo {
     public String toString() {
         return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
+
+    public DBType getDbType() {
+        return dbType;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public String getJar() {
+        return jar;
+    }
+
+    public String getUrlTemplate() {
+        return urlTemplate;
+    }
+
+    public String getPasswordChangeSql() {
+        return passwordChangeSql;
+    }
+
+    public int getDefaultPort() {
+        return defaultPort;
+    }
+
 
 }

@@ -11,7 +11,8 @@ import java.util.ArrayList;
 
 import com.ibm.db2.jcc.DB2Connection;
 
-public class DBUtil {
+public class DBUtil implements DBUtilInterface {
+
     private Connection connection;
     private DBInfo dbInfo;
 
@@ -45,16 +46,17 @@ public class DBUtil {
 
     }
 
+    @Override
     public String changePassword() {
         if (this.dbInfo.getDBType() == DBType.DB2) {
             DB2Connection conn = (DB2Connection) this.connection;
             try {
-                conn.changeDB2Password(this.dbInfo.password, this.dbInfo.newPassword);
+                conn.changeDB2Password(this.dbInfo.getPassword(), this.dbInfo.getNewPassword());
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            return this.dbInfo.newPassword;
+            return this.dbInfo.getNewPassword();
         } else {
             String query = this.dbInfo.getPasswordchangeSql();
             System.out.println(query);
@@ -68,10 +70,11 @@ public class DBUtil {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            return this.dbInfo.newPassword;
+            return this.dbInfo.getNewPassword();
         }
     }
 
+    @Override
     public void showTableMetaData(String Schema, String tableName) {
         try {
             DatabaseMetaData databaseMetaData = this.connection.getMetaData();
@@ -116,6 +119,7 @@ public class DBUtil {
         }
     }
 
+    @Override
     public ArrayList<String> getTablesList() {
         DatabaseMetaData databaseMetaData = null;
         ArrayList<String> tableList = new ArrayList<>();
@@ -138,6 +142,7 @@ public class DBUtil {
         return tableList;
     }
 
+    @Override
     public void executeQuery(String query) {
         ResultSet resultSet = null;
         try {
@@ -165,6 +170,7 @@ public class DBUtil {
 
     }
 
+    @Override
     public void listAllTables() {
         DatabaseMetaData databaseMetaData = null;
 
@@ -213,6 +219,10 @@ public class DBUtil {
             System.exit(-1);
         }
 
+    }
+
+    @Override
+    public void checkHeartbeat() {
     }
 
 }
