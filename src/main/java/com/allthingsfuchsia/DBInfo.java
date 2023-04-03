@@ -13,11 +13,10 @@ public class DBInfo {
     private int port;
     private String userName;
     private String password;
-    private String serviceName;
+    private String serviceName = "";
     private String uRL;
     private String newPassword;
     private String databaseName;
-
 
     public DBInfo(DBClassInfo dbClassInfo, String hostName, int port, String userName, String password,
             String serviceName, String uRL, String newPassword, String databaseName) {
@@ -26,6 +25,9 @@ public class DBInfo {
         this.port = port;
         this.userName = userName;
         this.password = password;
+        if (serviceName != null) {
+            this.serviceName = serviceName;
+        }
         this.serviceName = serviceName;
         this.uRL = uRL;
         this.newPassword = newPassword;

@@ -38,7 +38,7 @@ public class DBPasswordChanger {
                     dbutil.executeQuery(null);
                     break;
                 case showTableMetaData:
-                    dbutil.showTableMetaData(null, null);
+                    dbutil.showTableMetaData("system_auth", "roles");
                     break;
                 default:
                     break;
@@ -49,6 +49,7 @@ public class DBPasswordChanger {
             System.out.println(e.getMessage());
             new HelpFormatter().printHelp("apache args...", aParser.getOptions());
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println(e.getMessage());
         }
     }

@@ -27,7 +27,7 @@
         "dbType": "POSTGRES",
         "className": "org.postgresql.Driver",
         "jar": "postgresql-42.6.0.jar",
-        "urlTemplate": "jdbc:postgresql://${hostName}:${port}/${serviceName}",
+        "urlTemplate": "jdbc:postgresql://${hostName}:${port}/",
         "passwordChangeSql": "ALTER USER ${userName} WITH PASSWORD '${newPassword}';",
         "defaultPort": 5432
     },
